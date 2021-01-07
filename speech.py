@@ -135,6 +135,18 @@ def listen_print_loop(responses):
         else:
             print(transcript + overwrite_chars)
 
+
+            # in case I need time offsets for the words spoken
+            # for word_info in result.alternatives[0].words:
+            # word = word_info.word
+            # start_time = word_info.start_time
+            # end_time = word_info.end_time
+
+            # print(
+            #     f"Word: {word}, start_time: {start_time.total_seconds()}, end_time: {end_time.total_seconds()}"
+            # )
+
+
             with open(r"text/transcripts.txt", "a+") as transcript_file:
                 transcript_file.write(transcript + overwrite_chars + "\n")
             
@@ -160,7 +172,19 @@ def main():
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
         language_code=language_code,
-    )
+        
+        # using enhanced model
+        # doc: https://googleapis.dev/python/speech/latest/speech_v1/types.html?highlight=enhanced#google.cloud.speech_v1.types.RecognitionConfig.use_enhanced
+        # price: 0.024 a min when use_enhanced = False
+        # price: 0.036 a min when use_enhanced = True
+        # use_enhanced=True,
+        # model: 'phone_call', # model should be eitheer `phone_call` or `video`
+
+
+        # if transcripts need to have time offsets
+        # enable_word_time_offsets=True,
+
+    )   
 
     streaming_config = speech.StreamingRecognitionConfig(
         config=config, interim_results=True
